@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails du client{% endblock %}
+
+{% block body %}
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card shadow-lg">
+                <div class="card-header">
+                    <h2 class="mb-0"><i class="fas fa-user"></i> {{ customer.customerName }}</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="info-box mb-4">
+                                <h6 class="text-muted mb-2"><i class="fas fa-id-badge"></i> ID Client</h6>
+                                <p class="fw-bold"><code class="text-primary">{{ customer.customerId }}</code></p>
+                            </div>
+                            <div class="info-box mb-4">
+                                <h6 class="text-muted mb-2"><i class="fas fa-tag"></i> Segment</h6>
+                                <p><span class="badge bg-secondary">{{ customer.segment }}</span></p>
+                            </div>
+                            <div class="info-box mb-4">
+                                <h6 class="text-muted mb-2"><i class="fas fa-globe"></i> Pays</h6>
+                                <p class="fw-bold">{{ customer.country }}</p>
+                            </div>
+                            <div class="info-box">
+                                <h6 class="text-muted mb-2"><i class="fas fa-city"></i> Ville</h6>
+                                <p class="fw-bold">{{ customer.city }}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="info-box mb-4">
+                                <h6 class="text-muted mb-2"><i class="fas fa-map"></i> État</h6>
+                                <p class="fw-bold">{{ customer.state }}</p>
+                            </div>
+                            <div class="info-box mb-4">
+                                <h6 class="text-muted mb-2"><i class="fas fa-compass"></i> Région</h6>
+                                <p class="fw-bold">{{ customer.region }}</p>
+                            </div>
+                            <div class="info-box">
+                                <h6 class="text-muted mb-2"><i class="fas fa-envelope"></i> Code postal</h6>
+                                
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <div class="mt-4 d-flex gap-2">
+                        <a href="{{ path('customer_edit', {id: customer.id}) }}" class="btn btn-warning btn-lg">
+                            <i class="fas fa-edit"></i> Modifier
+                        </a>
+                        <form method="POST" action="{{ path('customer_delete', {id: customer.id}) }}" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr ?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ customer.id) }}">
+                            <button type="submit" class="btn btn-danger btn-lg">
+                                <i class="fas fa-trash"></i> Supprimer
+                            </button>
+                        </form>
+                        <a href="{{ path('customer_list') }}" class="btn btn-secondary btn-lg">
+                            <i class="fas fa-arrow-left"></i> Retour
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

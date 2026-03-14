@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier Commande {{ order.orderNumber }}{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1>Modifier Commande {{ order.orderNumber }}</h1>
+
+    {{ form_start(form) }}
+        <div class="form-group mb-3">
+            {{ form_label(form.customer, 'Client') }}
+            {{ form_widget(form.customer, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.customer) }}
+        </div>
+
+        <div class="form-group mb-3">
+            {{ form_label(form.status, 'Statut') }}
+            {{ form_widget(form.status, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.status) }}
+        </div>
+
+        <hr>
+        <h3>Articles actuels</h3>
+        {% if order.orderItems|length > 0 %}
+            <div class="table-responsive">
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>Produit</th>
+                            <th>Prix</th>
+                            <th>Quantité</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in order.orderItems %}
+                            <tr>
+                                <td>{{ item.product.name }}</td>
+                                <td>{{ item.unitPrice|number_format(2, ',', ' ') }} €</td>
+                                <td>{{ item.quantity }}</td>
+                                <td>{{ item.lineTotal|number_format(2, ',', ' ') }} €</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+
+        <hr>
+        <button type="submit" class="btn btn-success">Enregistrer les modifications</button>
+        <a href="{{ path('order_show', {id: order.id}) }}" class="btn btn-secondary">Annuler</a>
+    {{ form_end(form) }}
+</div>
+{% endblock %}

@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Catégories - Gestion{% endblock %}
+
+{% block body %}
+<div class="container mt-5 mb-5">
+    <div class="row align-items-center mb-4">
+        <div class="col-md-8">
+            <h1><i class="fas fa-layer-group"></i> Gestion des Catégories</h1>
+        </div>
+        <div class="col-md-4 text-end">
+            <a href="{{ path('category_create') }}" class="btn btn-primary btn-lg"><i class="fas fa-plus"></i> Ajouter une catégorie</a>
+        </div>
+    </div>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle"></i> {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    {% endfor %}
+
+    {% if categories|length > 0 %}
+        <div class="card shadow-md">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-dark">
+                            <tr>
+                                <th><i class="fas fa-tag"></i> Nom</th>
+                                <th><i class="fas fa-file-alt"></i> Description</th>
+                                <th class="text-center"><i class="fas fa-cube"></i> Produits</th>
+                                <th class="text-end"><i class="fas fa-cog"></i> Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for category in categories %}
+                                <tr>
+                                    <td><strong>{{ category.name }}</strong></td>
+                                    <td>
+                                        {% if category.description %}
+                                            {{ category.description|slice(0, 60) }}{% if category.description|length > 60 %}...{% endif %}
+                                        {% else %}
+                                            <em class="text-muted">Pas de description</em>
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="badge bg-info"><i class="fas fa-box"></i> {{ category.products|length }}</span>
+                                    </td>
+                                    <td class="text-end">
+                                        <div class="btn-group btn-group-sm" role="group">
+                                            <a href="{{ path('category_edit', {id: category.id}) }}" class="btn btn-warning" title="Modifier">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <form method="POST" action="{{ path('category_delete', {id: category.id}) }}" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr ? Les produits de cette catégorie seront aussi supprimés.');">
+                                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ category.id) }}">
+                                                <button type="submit" class="btn btn-danger btn-sm" title="Supprimer">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+            <i class="fas fa-info-circle"></i> Aucune catégorie trouvée. <a href="{{ path('category_create') }}" class="alert-link">Créez-en une</a>.
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

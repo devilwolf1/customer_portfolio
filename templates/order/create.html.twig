@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvelle Commande{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1>Créer une Commande</h1>
+
+    {{ form_start(form) }}
+        <div class="form-group mb-3">
+            {{ form_label(form.customer, 'Client') }}
+            {{ form_widget(form.customer, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.customer) }}
+        </div>
+
+        <div class="form-group mb-3">
+            {{ form_label(form.status, 'Statut') }}
+            {{ form_widget(form.status, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.status) }}
+        </div>
+
+        <hr>
+        <h3>Articles</h3>
+        <p class="text-muted">Ajoutez les produits à la commande.</p>
+
+        <div id="order-items">
+            <!-- Items ajoutés via JavaScript -->
+        </div>
+
+        <button type="button" class="btn btn-secondary mb-3" id="add-item">+ Ajouter un article</button>
+
+        <hr>
+        <button type="submit" class="btn btn-success">Créer la Commande</button>
+        <a href="{{ path('order_index') }}" class="btn btn-secondary">Annuler</a>
+    {{ form_end(form) }}
+</div>
+
+<script>
+    // Script simple pour ajouter des articles (à améliorer avec Collection/Prototype)
+    document.getElementById('add-item')?.addEventListener('click', function() {
+        alert('Fonctionnalité à implémenter avec Symfony Collection.');
+    });
+</script>
+{% endblock %}

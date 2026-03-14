@@ -1,0 +1,187 @@
+@startuml Customer_Portfolio_ClassDiagram
+
+!theme plain
+skinparam backgroundColor #FEFEFE
+skinparam classBackgroundColor #F0F0F0
+skinparam classBorderColor #333333
+
+' ============================================
+' ENTITÉS - CUSTOMER PORTFOLIO
+' ============================================
+
+class User {
+    - id: int
+    - email: string
+    - password: string
+    - full_name: string
+    - roles: array
+    - is_active: boolean
+    - api_token: string
+    - created_at: DateTimeImmutable
+    - updated_at: DateTimeImmutable
+    --
+    + getId(): int
+    + getEmail(): string
+    + setEmail(string): User
+    + getRoles(): array
+    + setRoles(array): User
+    + getPassword(): string
+    + setPassword(string): User
+    + getFullName(): string
+    + setFullName(string): User
+    + isActive(): boolean
+    + setIsActive(bool): User
+}
+
+class Customer {
+    - id: int
+    - customer_id: string
+    - customer_name: string
+    - segment: string
+    - country: string
+    - city: string
+    - state: string
+    - region: string
+    - postal_code: string
+    - orders: Collection<Order>
+    --
+    + getId(): int
+    + getCustomerId(): string
+    + setCustomerId(string): Customer
+    + getCustomerName(): string
+    + setCustomerName(string): Customer
+    + getSegment(): string
+    + setSegment(string): Customer
+    + getCountry(): string
+    + setCountry(string): Customer
+    + getOrders(): Collection
+    + addOrder(Order): Customer
+    + removeOrder(Order): Customer
+}
+
+class Category {
+    - id: int
+    - name: string
+    - description: string
+    - products: Collection<Product>
+    --
+    + getId(): int
+    + getName(): string
+    + setName(string): Category
+    + getDescription(): string
+    + setDescription(string): Category
+    + getProducts(): Collection
+    + addProduct(Product): Category
+    + removeProduct(Product): Category
+}
+
+class Product {
+    - id: int
+    - name: string
+    - description: string
+    - price: decimal
+    - quantity: int
+    - category: Category
+    - created_at: DateTime
+    - updated_at: DateTime
+    --
+    + getId(): int
+    + getName(): string
+    + setName(string): Product
+    + getDescription(): string
+    + setDescription(string): Product
+    + getPrice(): string
+    + setPrice(string): Product
+    + getQuantity(): int
+    + setQuantity(int): Product
+    + getCategory(): Category
+    + setCategory(Category): Product
+    + getCreatedAt(): DateTime
+    + getUpdatedAt(): DateTime
+}
+
+class Order {
+    - id: int
+    - order_number: string
+    - customer: Customer
+    - total: decimal
+    - status: string
+    - created_at: DateTime
+    - updated_at: DateTime
+    - orderItems: Collection<OrderItem>
+    --
+    + getId(): int
+    + getOrderNumber(): string
+    + setOrderNumber(string): Order
+    + getCustomer(): Customer
+    + setCustomer(Customer): Order
+    + getTotal(): string
+    + setTotal(string): Order
+    + getStatus(): string
+    + setStatus(string): Order
+    + getOrderItems(): Collection
+    + addOrderItem(OrderItem): Order
+    + removeOrderItem(OrderItem): Order
+}
+
+class OrderItem {
+    - id: int
+    - order: Order
+    - product: Product
+    - unit_price: decimal
+    - quantity: int
+    - line_total: decimal
+    --
+    + getId(): int
+    + getOrder(): Order
+    + setOrder(Order): OrderItem
+    + getProduct(): Product
+    + setProduct(Product): OrderItem
+    + getUnitPrice(): string
+    + setUnitPrice(string): OrderItem
+    + getQuantity(): int
+    + setQuantity(int): OrderItem
+    + getLineTotal(): string
+    + setLineTotal(string): OrderItem
+}
+
+' ============================================
+' RELATIONS
+' ============================================
+
+Customer "1" --> "*" Order : crée
+Order "1" --> "*" OrderItem : contient
+Product "1" <-- "*" OrderItem : inclus dans
+Category "1" --> "*" Product : catégorise
+
+note right of User
+  Utilisateur de l'application
+  avec authentification et autorisation
+end note
+
+note right of Customer
+  Données client
+  Segment, localisation, coordonnées
+end note
+
+note right of Category
+  Classification des produits
+  Peut avoir une hiérarchie parent-enfant
+end note
+
+note right of Product
+  Catalogue produits
+  Prix, stock, catégorie
+end note
+
+note right of Order
+  Commande client
+  Statut: pending, confirmed, shipped, delivered, cancelled
+end note
+
+note right of OrderItem
+  Ligne de commande
+  Référence Order et Product
+end note
+
+@enduml

@@ -1,0 +1,75 @@
+{% extends "base.html.twig" %}
+
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block body %}
+<div class="container mt-5 mb-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card shadow-lg">
+                <div class="card-header">
+                    <h2 class="mb-0"><i class="fas fa-cube"></i> {{ product.name }}</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <div class="info-box mb-4">
+                                <h6 class="text-muted mb-2"><i class="fas fa-euro-sign"></i> Prix</h6>
+                                <p class="h5 text-success fw-bold">{{ product.price|number_format(2, ',', ' ') }} €</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="info-box mb-4">
+                                <h6 class="text-muted mb-2"><i class="fas fa-warehouse"></i> Quantité</h6>
+                                <p class="h5 fw-bold">
+                                    {% if product.quantity > 0 %}
+                                        <span class="badge bg-success"><i class="fas fa-check"></i> {{ product.quantity }} en stock</span>
+                                    {% else %}
+                                        <span class="badge bg-danger"><i class="fas fa-exclamation"></i> Rupture de stock</span>
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <div class="info-box mb-4">
+                                <h6 class="text-muted mb-2"><i class="fas fa-folder"></i> Catégorie</h6>
+                                <p><span class="badge bg-info"><i class="fas fa-tag"></i> {{ product.category.name }}</span></p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="info-box mb-4">
+                                <h6 class="text-muted mb-2"><i class="fas fa-calendar"></i> Créé le</h6>
+                                <p class="fw-bold">{{ product.createdAt|date('d/m/Y H:i') }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if product.updatedAt %}
+                        <div class="mt-3 p-3 bg-light rounded">
+                            <h6 class="text-muted mb-2"><i class="fas fa-sync"></i> Dernière modification</h6>
+                            <p class="mb-0 fw-bold">{{ product.updatedAt|date('d/m/Y H:i') }}</p>
+                        </div>
+                    {% endif %}
+
+                    <div class="mt-4 p-3 bg-light rounded">
+                        <h5 class="mb-3"><i class="fas fa-align-left"></i> Description</h5>
+                        <p class="mb-0">{{ product.description|default('Pas de description fournie') }}</p>
+                    </div>
+
+                    <div class="mt-5 d-flex gap-2">
+                        <a href="{{ path('product_edit', {'id': product.id}) }}" class="btn btn-warning btn-lg">
+                            <i class="fas fa-edit"></i> Modifier
+                        </a>
+                        <a href="{{ path('product_list') }}" class="btn btn-secondary btn-lg">
+                            <i class="fas fa-arrow-left"></i> Retour à la liste
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

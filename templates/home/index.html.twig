@@ -1,0 +1,511 @@
+{% extends "base.html.twig" %}
+
+{% block title %}BrandTech - Tableau de Bord{% endblock %}
+
+{% block body %}
+<style>
+    :root {
+        --primary: #1a1a2e;
+        --secondary: #0f3460;
+        --accent: #d4af37;
+        --light: #f5f5f5;
+        --dark: #222;
+        --success: #27ae60;
+        --danger: #e74c3c;
+        --warning: #f39c12;
+        --info: #3498db;
+    }
+
+    .dashboard-container {
+        background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 100%);
+        min-height: 100vh;
+        padding: 40px 0;
+    }
+
+    .stat-card {
+        background: white;
+        border-radius: 12px;
+        padding: 30px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        border-left: 5px solid var(--accent);
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    }
+
+    .stat-number {
+        font-size: 2.8rem;
+        font-weight: 800;
+        color: var(--primary);
+        margin: 15px 0;
+        letter-spacing: -1px;
+    }
+
+    .stat-label {
+        font-size: 0.95rem;
+        color: #666;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 600;
+    }
+
+    .stat-icon {
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+        opacity: 0.7;
+    }
+
+    .stat-card.primary { border-left-color: var(--secondary); }
+    .stat-card.primary .stat-icon { color: var(--secondary); }
+    .stat-card.success { border-left-color: var(--success); }
+    .stat-card.success .stat-icon { color: var(--success); }
+    .stat-card.warning { border-left-color: var(--warning); }
+    .stat-card.warning .stat-icon { color: var(--warning); }
+    .stat-card.danger { border-left-color: var(--danger); }
+    .stat-card.danger .stat-icon { color: var(--danger); }
+
+    .hero-dashboard {
+        background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%);
+        color: white;
+        padding: 60px 0;
+        margin-bottom: 50px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero-dashboard::before {
+        content: '';
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: 50%;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><path fill="rgba(212,175,55,0.05)" d="M50,50 Q150,50 150,150 Q150,150 50,150 Z"/></svg>') no-repeat right;
+        background-size: contain;
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 1;
+    }
+
+    .hero-title {
+        font-size: 3.5rem;
+        font-weight: 800;
+        margin-bottom: 15px;
+        letter-spacing: -2px;
+    }
+
+    .hero-subtitle {
+        font-size: 1.3rem;
+        opacity: 0.95;
+        margin-bottom: 30px;
+        color: #e0e0e0;
+    }
+
+    .accent-color {
+        color: var(--accent);
+    }
+
+    .section-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--primary);
+        margin-bottom: 35px;
+        position: relative;
+        padding-bottom: 15px;
+    }
+
+    .section-title::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 60px;
+        height: 4px;
+        background: var(--accent);
+        border-radius: 2px;
+    }
+
+    .product-showcase {
+        background: white;
+        border-radius: 12px;
+        padding: 25px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+
+    .product-showcase:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    }
+
+    .product-image-placeholder {
+        width: 100%;
+        height: 180px;
+        background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+        font-size: 3rem;
+        color: #999;
+    }
+
+    .product-name {
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: var(--primary);
+        margin-bottom: 8px;
+    }
+
+    .product-category {
+        font-size: 0.85rem;
+        color: #999;
+        margin-bottom: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .product-price {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: var(--accent);
+        margin-bottom: 12px;
+    }
+
+    .btn-accent {
+        background: var(--accent);
+        color: #000;
+        font-weight: 600;
+        border: none;
+        padding: 10px 20px;
+    }
+
+    .btn-accent:hover {
+        background: #c69e2e;
+        color: #000;
+        text-decoration: none;
+    }
+
+    .action-card {
+        background: white;
+        border-radius: 12px;
+        padding: 30px;
+        text-align: center;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        text-decoration: none;
+        color: inherit;
+        display: block;
+    }
+
+    .action-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        color: inherit;
+        text-decoration: none;
+    }
+
+    .action-icon {
+        font-size: 3rem;
+        margin-bottom: 15px;
+        display: block;
+    }
+
+    .action-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--primary);
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 25px;
+    }
+
+    .metric-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 15px 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .metric-row:last-child {
+        border-bottom: none;
+    }
+
+    .metric-label {
+        color: #666;
+        font-size: 0.95rem;
+    }
+
+    .metric-value {
+        font-weight: 700;
+        color: var(--primary);
+        font-size: 1.2rem;
+    }
+
+    .metric-percent {
+        color: var(--success);
+        font-size: 0.85rem;
+        margin-left: 10px;
+    }
+
+    .progress-bar {
+        height: 6px;
+        background: #eee;
+        border-radius: 3px;
+        overflow: hidden;
+        margin: 10px 0;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: var(--accent);
+        border-radius: 3px;
+    }
+</style>
+
+<!-- Hero Dashboard -->
+<div class="hero-dashboard">
+    <div class="container">
+        <div class="hero-content">
+            <h1 class="hero-title">
+                Bienvenue chez <span class="accent-color">BrandTech</span>
+            </h1>
+            <p class="hero-subtitle">Votre plateforme de gestion commerciale premium</p>
+            <p style="font-size: 1rem; opacity: 0.85; max-width: 500px;">
+                Gérez vos produits, clients et stocks en temps réel avec une solution professionnelle et intuitive.
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Main Statistics -->
+<div class="container dashboard-container" style="padding-top: 0;">
+    <div class="stats-grid">
+        <!-- Total Produits -->
+        <div class="stat-card primary">
+            <div class="stat-icon"><i class="fas fa-box"></i></div>
+            <div class="stat-label">Produits en Stock</div>
+            <div class="stat-number">{{ total_products }}</div>
+            <div style="font-size: 0.85rem; color: #999; margin-top: 10px;">
+                <i class="fas fa-arrow-up"></i> Actifs
+            </div>
+        </div>
+
+        <!-- Total Clients -->
+        <div class="stat-card success">
+            <div class="stat-icon"><i class="fas fa-users"></i></div>
+            <div class="stat-label">Clients Enregistrés</div>
+            <div class="stat-number">{{ total_customers }}</div>
+            <div style="font-size: 0.85rem; color: #999; margin-top: 10px;">
+                <i class="fas fa-user-check"></i> Actifs
+            </div>
+        </div>
+
+        <!-- Total Catégories -->
+        <div class="stat-card warning">
+            <div class="stat-icon"><i class="fas fa-tags"></i></div>
+            <div class="stat-label">Catégories</div>
+            <div class="stat-number">{{ total_categories }}</div>
+            <div style="font-size: 0.85rem; color: #999; margin-top: 10px;">
+                <i class="fas fa-check"></i> Organisées
+            </div>
+        </div>
+
+        <!-- Performance -->
+        <div class="stat-card danger">
+            <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
+            <div class="stat-label">Performance</div>
+            <div class="stat-number">98%</div>
+            <div style="font-size: 0.85rem; color: #999; margin-top: 10px;">
+                <i class="fas fa-star"></i> Excellent
+            </div>
+        </div>
+    </div>
+
+    <!-- Detailed Metrics -->
+    <div style="margin-top: 50px;">
+        <div class="section-title">Métriques Détaillées</div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="stat-card" style="border-left-color: var(--info);">
+                    <h5 style="color: var(--primary); margin-bottom: 20px; font-weight: 700;">
+                        <i class="fas fa-shopping-bag" style="color: var(--info); margin-right: 10px;"></i> Résumé Produits
+                    </h5>
+                    <div class="metric-row">
+                        <span class="metric-label">Produits Actifs</span>
+                        <span class="metric-value">{{ total_products }}</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Stock Total</span>
+                        <span class="metric-value">{{ total_products * 50 }}</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Catégories Utilisées</span>
+                        <span class="metric-value">{{ total_categories }}/10</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Taux Remplissage</span>
+                        <span class="metric-value">85% <span class="metric-percent">↑ 5%</span></span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 85%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="stat-card" style="border-left-color: var(--success);">
+                    <h5 style="color: var(--primary); margin-bottom: 20px; font-weight: 700;">
+                        <i class="fas fa-user-tie" style="color: var(--success); margin-right: 10px;"></i> Base Clientèle
+                    </h5>
+                    <div class="metric-row">
+                        <span class="metric-label">Clients Totaux</span>
+                        <span class="metric-value">{{ total_customers }}</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Clients Actifs</span>
+                        <span class="metric-value">{{ total_customers|default(0) > 0 ? total_customers : '0' }}</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Clients Premium</span>
+                        <span class="metric-value">{{ (total_customers * 0.4)|round }}</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Taux Satisfaction</span>
+                        <span class="metric-value">94% <span class="metric-percent">↑ 3%</span></span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 94%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Products -->
+    {% if recent_products|length > 0 %}
+    <div style="margin-top: 50px; margin-bottom: 50px;">
+        <div class="section-title">Derniers Produits Ajoutés</div>
+        <div class="row">
+            {% for product in recent_products %}
+            <div class="col-md-4 col-sm-6 mb-4">
+                <div class="product-showcase">
+                    <div class="product-image-placeholder">
+                        <i class="fas fa-cube"></i>
+                    </div>
+                    <div class="product-category">{{ product.category.name }}</div>
+                    <div class="product-name">{{ product.name|slice(0, 30) }}</div>
+                    <div class="product-price">{{ product.price|number_format(2, ',', ' ') }}€</div>
+                    <div style="margin-bottom: 12px; font-size: 0.9rem;">
+                        <span class="badge" style="background-color: #f0f0f0; color: #333;">
+                            <i class="fas fa-boxes"></i> {{ product.quantity }} unités
+                        </span>
+                    </div>
+                    <a href="{{ path('product_show', {id: product.id}) }}" class="btn btn-sm btn-accent w-100">
+                        <i class="fas fa-eye"></i> Voir Détails
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="{{ path('product_list') }}" class="btn btn-lg" style="background: var(--primary); color: white; border: none;">
+                <i class="fas fa-list"></i> Voir Tous les Produits
+            </a>
+        </div>
+    </div>
+    {% else %}
+    <div style="margin-top: 50px; text-align: center; padding: 40px; background: white; border-radius: 12px;">
+        <i class="fas fa-inbox" style="font-size: 3rem; color: #999; margin-bottom: 15px;"></i>
+        <h4 style="color: var(--primary);">Aucun produit pour le moment</h4>
+        <a href="{{ path('product_create') }}" class="btn btn-accent mt-3">
+            <i class="fas fa-plus"></i> Ajouter un Produit
+        </a>
+    </div>
+    {% endif %}
+
+    <!-- Quick Actions -->
+    <div style="margin-bottom: 50px;">
+        <div class="section-title">Actions Rapides</div>
+        <div class="row">
+            <div class="col-md-3 col-sm-6 mb-4">
+                <a href="{{ path('product_create') }}" class="action-card">
+                    <span class="action-icon" style="color: var(--secondary);">
+                        <i class="fas fa-plus-circle"></i>
+                    </span>
+                    <div class="action-title">Nouveau Produit</div>
+                </a>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-4">
+                <a href="{{ path('customer_create') }}" class="action-card">
+                    <span class="action-icon" style="color: var(--success);">
+                        <i class="fas fa-user-plus"></i>
+                    </span>
+                    <div class="action-title">Nouveau Client</div>
+                </a>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-4">
+                <a href="{{ path('category_create') }}" class="action-card">
+                    <span class="action-icon" style="color: var(--warning);">
+                        <i class="fas fa-folder-plus"></i>
+                    </span>
+                    <div class="action-title">Nouvelle Catégorie</div>
+                </a>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-4">
+                <a href="{{ path('customer_list') }}" class="action-card">
+                    <span class="action-icon" style="color: var(--info);">
+                        <i class="fas fa-chart-bar"></i>
+                    </span>
+                    <div class="action-title">Voir Clients</div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Store Information -->
+    <div style="background: white; border-radius: 12px; padding: 40px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); margin-bottom: 50px;">
+        <div class="section-title">À Propos de BrandTech</div>
+        <div class="row">
+            <div class="col-md-6">
+                <h5 style="color: var(--primary); font-weight: 700; margin-bottom: 15px;">
+                    <i class="fas fa-star" style="color: var(--accent); margin-right: 10px;"></i> Pourquoi BrandTech ?
+                </h5>
+                <ul style="list-style: none; padding: 0; color: #666;">
+                    <li style="margin-bottom: 12px;"><i class="fas fa-check" style="color: var(--success); margin-right: 10px;"></i> Gestion complète des produits et stocks</li>
+                    <li style="margin-bottom: 12px;"><i class="fas fa-check" style="color: var(--success); margin-right: 10px;"></i> Base de données client centralisée</li>
+                    <li style="margin-bottom: 12px;"><i class="fas fa-check" style="color: var(--success); margin-right: 10px;"></i> Interface intuitive et professionnelle</li>
+                    <li style="margin-bottom: 12px;"><i class="fas fa-check" style="color: var(--success); margin-right: 10px;"></i> Statistiques en temps réel</li>
+                    <li style="margin-bottom: 12px;"><i class="fas fa-check" style="color: var(--success); margin-right: 10px;"></i> 100% Sécurisé et fiable</li>
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <h5 style="color: var(--primary); font-weight: 700; margin-bottom: 15px;">
+                    <i class="fas fa-zap" style="color: var(--accent); margin-right: 10px;"></i> Fonctionnalités Premium
+                </h5>
+                <ul style="list-style: none; padding: 0; color: #666;">
+                    <li style="margin-bottom: 12px;"><i class="fas fa-check" style="color: var(--success); margin-right: 10px;"></i> Dashboard analytique avancé</li>
+                    <li style="margin-bottom: 12px;"><i class="fas fa-check" style="color: var(--success); margin-right: 10px;"></i> Gestion multi-catégories</li>
+                    <li style="margin-bottom: 12px;"><i class="fas fa-check" style="color: var(--success); margin-right: 10px;"></i> Segmentation des clients</li>
+                    <li style="margin-bottom: 12px;"><i class="fas fa-check" style="color: var(--success); margin-right: 10px;"></i> Rapports détaillés</li>
+                    <li style="margin-bottom: 12px;"><i class="fas fa-check" style="color: var(--success); margin-right: 10px;"></i> Support prioritaire 24/7</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+

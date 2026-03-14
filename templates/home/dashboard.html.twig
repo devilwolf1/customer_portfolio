@@ -1,0 +1,211 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tableau de Bord - Gestion Client & Produits{% endblock %}
+
+{% block body %}
+<!-- Hero Section -->
+<div class="hero-section" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 80px 0; margin-bottom: 50px;">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold mb-3"><i class="fas fa-chart-line"></i> Tableau de Bord</h1>
+                <p class="lead mb-0">Bienvenue dans votre système de gestion client et produits. Suivez vos performances en temps réel.</p>
+            </div>
+            <div class="col-lg-4 text-end">
+                <i class="fas fa-chart-pie" style="font-size: 80px; opacity: 0.3;"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Statistics Cards -->
+<div class="container mb-5">
+    <div class="row g-4 mb-5">
+        <!-- Total Products -->
+        <div class="col-md-6 col-lg-3">
+            <div class="card shadow-lg border-0 h-100" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h6 class="card-subtitle opacity-75">Produits</h6>
+                            <h2 class="card-title fw-bold mb-0">{{ total_products }}</h2>
+                        </div>
+                        <i class="fas fa-box fa-2x opacity-50"></i>
+                    </div>
+                    <small class="opacity-75 mt-2 d-block"><i class="fas fa-arrow-up"></i> En stock</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Customers -->
+        <div class="col-md-6 col-lg-3">
+            <div class="card shadow-lg border-0 h-100" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white;">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h6 class="card-subtitle opacity-75">Clients</h6>
+                            <h2 class="card-title fw-bold mb-0">{{ total_customers }}</h2>
+                        </div>
+                        <i class="fas fa-users fa-2x opacity-50"></i>
+                    </div>
+                    <small class="opacity-75 mt-2 d-block"><i class="fas fa-arrow-up"></i> Actifs</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Categories -->
+        <div class="col-md-6 col-lg-3">
+            <div class="card shadow-lg border-0 h-100" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white;">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h6 class="card-subtitle opacity-75">Catégories</h6>
+                            <h2 class="card-title fw-bold mb-0">{{ total_categories }}</h2>
+                        </div>
+                        <i class="fas fa-tags fa-2x opacity-50"></i>
+                    </div>
+                    <small class="opacity-75 mt-2 d-block"><i class="fas fa-check-circle"></i> Créées</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="col-md-6 col-lg-3">
+            <div class="card shadow-lg border-0 h-100" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white;">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h6 class="card-subtitle opacity-75">Actions</h6>
+                            <h2 class="card-title fw-bold mb-0">3</h2>
+                        </div>
+                        <i class="fas fa-bolt fa-2x opacity-50"></i>
+                    </div>
+                    <small class="opacity-75 mt-2 d-block"><i class="fas fa-zap"></i> Rapides</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Products Section -->
+    <div class="mb-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="mb-0"><i class="fas fa-inbox"></i> Produits Récents</h3>
+            <a href="{{ path('product_list') }}" class="btn btn-outline-primary btn-sm">Voir tous</a>
+        </div>
+
+        {% if recent_products|length > 0 %}
+            <div class="row g-4">
+                {% for product in recent_products %}
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card shadow-sm border-0 h-100 product-card" style="transition: all 0.3s ease;">
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold text-truncate">{{ product.name }}</h5>
+                                <p class="card-text text-muted small">{{ product.description|slice(0, 60)|raw }}{{ product.description|length > 60 ? '...' : '' }}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="badge bg-secondary">{{ product.category.name }}</span>
+                                    <span class="badge bg-success">{{ product.price|number_format(2, ',', ' ') }}€</span>
+                                </div>
+                            </div>
+                            <div class="card-footer border-0 bg-light">
+                                <a href="{{ path('product_show', {id: product.id}) }}" class="btn btn-sm btn-primary w-100">
+                                    <i class="fas fa-eye"></i> Détails
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle"></i> Aucun produit trouvé. <a href="{{ path('product_create') }}" class="alert-link">Créer le premier produit</a>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Quick Actions Section -->
+    <div class="mb-5">
+        <h3 class="mb-4"><i class="fas fa-lightning-bolt"></i> Actions Rapides</h3>
+        <div class="row g-3">
+            <div class="col-md-6 col-lg-4">
+                <a href="{{ path('customer_create') }}" class="text-decoration-none">
+                    <div class="card shadow-sm border-0 text-center py-4" style="background: linear-gradient(135deg, rgba(240, 147, 251, 0.1) 0%, rgba(245, 87, 108, 0.1) 100%); transition: all 0.3s ease; cursor: pointer;">
+                        <i class="fas fa-user-plus fa-3x text-danger mb-3"></i>
+                        <h5 class="mb-0">Ajouter un Client</h5>
+                        <small class="text-muted">Nouveau client</small>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <a href="{{ path('product_create') }}" class="text-decoration-none">
+                    <div class="card shadow-sm border-0 text-center py-4" style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%); transition: all 0.3s ease; cursor: pointer;">
+                        <i class="fas fa-plus-square fa-3x text-primary mb-3"></i>
+                        <h5 class="mb-0">Ajouter un Produit</h5>
+                        <small class="text-muted">Nouveau produit</small>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <a href="{{ path('category_create') }}" class="text-decoration-none">
+                    <div class="card shadow-sm border-0 text-center py-4" style="background: linear-gradient(135deg, rgba(79, 172, 254, 0.1) 0%, rgba(0, 242, 254, 0.1) 100%); transition: all 0.3s ease; cursor: pointer;">
+                        <i class="fas fa-list-ul fa-3x text-info mb-3"></i>
+                        <h5 class="mb-0">Ajouter une Catégorie</h5>
+                        <small class="text-muted">Nouvelle catégorie</small>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Section -->
+    <div class="mb-5">
+        <h3 class="mb-4"><i class="fas fa-compass"></i> Navigation</h3>
+        <div class="row g-3">
+            <div class="col-md-6 col-lg-4">
+                <a href="{{ path('customer_list') }}" class="text-decoration-none">
+                    <div class="card shadow-sm border-0 h-100" style="transition: all 0.3s ease; cursor: pointer;">
+                        <div class="card-body text-center">
+                            <i class="fas fa-address-book fa-2x text-danger mb-3"></i>
+                            <h5>Gestion des Clients</h5>
+                            <p class="text-muted small">{{ total_customers }} client{{ total_customers > 1 ? 's' : '' }}</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <a href="{{ path('product_list') }}" class="text-decoration-none">
+                    <div class="card shadow-sm border-0 h-100" style="transition: all 0.3s ease; cursor: pointer;">
+                        <div class="card-body text-center">
+                            <i class="fas fa-shopping-cart fa-2x text-primary mb-3"></i>
+                            <h5>Gestion des Produits</h5>
+                            <p class="text-muted small">{{ total_products }} produit{{ total_products > 1 ? 's' : '' }}</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <a href="{{ path('category_list') }}" class="text-decoration-none">
+                    <div class="card shadow-sm border-0 h-100" style="transition: all 0.3s ease; cursor: pointer;">
+                        <div class="card-body text-center">
+                            <i class="fas fa-folder fa-2x text-info mb-3"></i>
+                            <h5>Gestion des Catégories</h5>
+                            <p class="text-muted small">{{ total_categories }} catégorie{{ total_categories > 1 ? 's' : '' }}</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1) !important;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+}
+</style>
+{% endblock %}

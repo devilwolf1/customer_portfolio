@@ -1,0 +1,4 @@
+# Disable the PhpStanExtractor to avoid compatibility issues
+framework:
+    property_info:
+        enabled: false

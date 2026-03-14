@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Page non trouvée (404){% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-body text-center">
+                    <div class="display-1 text-warning mb-4">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h1 class="card-title h2 mb-3">Page non trouvée</h1>
+                    <p class="card-text text-muted mb-4">
+                        Désolé, la page que vous recherchez n'existe pas ou a été déplacée.
+                    </p>
+
+                    <div class="mb-4">
+                        <p class="text-muted">Voici quelques suggestions :</p>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check text-success"></i> Vérifiez l'URL pour les erreurs de frappe</li>
+                            <li><i class="fas fa-check text-success"></i> Utilisez la navigation pour trouver ce que vous cherchez</li>
+                            <li><i class="fas fa-check text-success"></i> Retournez à la page d'accueil</li>
+                        </ul>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                        <a href="{{ path('home') }}" class="btn btn-primary btn-lg">
+                            <i class="fas fa-home"></i> Retour à l'accueil
+                        </a>
+                        <button onclick="history.back()" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left"></i> Page précédente
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

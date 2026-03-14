@@ -1,0 +1,108 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Clients - Gestion{% endblock %}
+
+{% block body %}
+<div class="container mt-5 mb-5">
+    <div class="row align-items-center mb-4">
+        <div class="col-md-8">
+            <h1><i class="fas fa-users"></i> Gestion des Clients</h1>
+        </div>
+        <div class="col-md-4 text-end">
+            <a href="{{ path('customer_create') }}" class="btn btn-primary btn-lg"><i class="fas fa-plus"></i> Ajouter t</a>
+        </div>
+    </div>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle"></i> {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    {% endfor %}
+
+    {% if customers|length > 0 %}
+        <div class="card shadow-md">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-dark">
+                            <tr>
+                                <th><i class="fas fa-id-badge"></i> ID Client</th>
+                                <th><i class="fas fa-user"></i> Nom</th>
+                                <th><i class="fas fa-tag"></i> Segment</th>
+                                <th><i class="fas fa-globe"></i> Pays</th>
+                                <th><i class="fas fa-city"></i> Ville</th>
+                                <th class="text-end"><i class="fas fa-cog"></i> Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for customer in customers %}
+                                <tr>
+                                    <td><code class="text-primary">{{ customer.customerId }}</code></td>
+                                    <td><strong>{{ customer.customerName }}</strong></td>
+                                    <td><span class="badge bg-secondary">{{ customer.segment }}</span></td>
+                                    <td>{{ customer.country }}</td>
+                                    <td>{{ customer.city }}</td>
+                                    <td class="text-end">
+                                        <div class="btn-group btn-group-sm" role="group">
+                                            <a href="{{ path('customer_show', {id: customer.id}) }}" class="btn btn-info" title="Voir détails">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <a href="{{ path('customer_edit', {id: customer.id}) }}" class="btn btn-warning" title="Modifier">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <form method="POST" action="{{ path('customer_delete', {id: customer.id}) }}" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr ?');">
+                                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ customer.id) }}">
+                                                <button type="submit" class="btn btn-danger btn-sm" title="Supprimer">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        {% if pages > 1 %}
+            <nav aria-label="Page navigation" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {% if page > 1 %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ path('customer_list', {page: 1}) }}"><i class="fas fa-chevron-left"></i><i class="fas fa-chevron-left"></i></a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="{{ path('customer_list', {page: page - 1}) }}"><i class="fas fa-chevron-left"></i> Précédente</a>
+                        </li>
+                    {% endif %}
+
+                    {% for p in 1..pages %}
+                        <li class="page-item {% if p == page %}active{% endif %}">
+                            <a class="page-link" href="{{ path('customer_list', {page: p}) }}">{{ p }}</a>
+                        </li>
+                    {% endfor %}
+
+                    {% if page < pages %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ path('customer_list', {page: page + 1}) }}">Suivante <i class="fas fa-chevron-right"></i></a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="{{ path('customer_list', {page: pages}) }}"><i class="fas fa-chevron-right"></i><i class="fas fa-chevron-right"></i></a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+    {% else %}
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+            <i class="fas fa-info-circle"></i> Aucun client trouvé. <a href="{{ path('customer_create') }}" class="alert-link">Créez-en un</a>.
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+

@@ -1,0 +1,90 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Ajouter un produit{% endblock %}
+
+{% block body %}
+<div class="container mt-5 mb-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card shadow-lg">
+                <div class="card-header">
+                    <h2 class="mb-0"><i class="fas fa-plus-circle"></i> Ajouter un nouveau produit</h2>
+                </div>
+                <div class="card-body">
+                    {% if form.vars.errors|length > 0 %}
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <h5 class="alert-heading"><i class="fas fa-exclamation-triangle"></i> Erreurs du formulaire</h5>
+                            {{ form_errors(form) }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% endif %}
+
+                    {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'needs-validation'}}) }}
+                        <div class="mb-4">
+                            {{ form_label(form.name, 'Nom du produit *', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+                            {% if form.name.vars.errors|length > 0 %}
+                                <div class="invalid-feedback d-block">
+                                    <i class="fas fa-times-circle"></i> {{ form_errors(form.name) }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-4">
+                            {{ form_label(form.description, 'Description', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+                            {% if form.description.vars.errors|length > 0 %}
+                                <div class="invalid-feedback d-block">
+                                    <i class="fas fa-times-circle"></i> {{ form_errors(form.description) }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-4">
+                                    {{ form_label(form.price, 'Prix (EUR) *', {'label_attr': {'class': 'form-label'}}) }}
+                                    {{ form_widget(form.price, {'attr': {'class': 'form-control'}}) }}
+                                    {% if form.price.vars.errors|length > 0 %}
+                                        <div class="invalid-feedback d-block">
+                                            <i class="fas fa-times-circle"></i> {{ form_errors(form.price) }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-4">
+                                    {{ form_label(form.quantity, 'Quantité en stock *', {'label_attr': {'class': 'form-label'}}) }}
+                                    {{ form_widget(form.quantity, {'attr': {'class': 'form-control'}}) }}
+                                    {% if form.quantity.vars.errors|length > 0 %}
+                                        <div class="invalid-feedback d-block">
+                                            <i class="fas fa-times-circle"></i> {{ form_errors(form.quantity) }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            {{ form_label(form.category, 'Catégorie *', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.category, {'attr': {'class': 'form-control'}}) }}
+                            {% if form.category.vars.errors|length > 0 %}
+                                <div class="invalid-feedback d-block">
+                                    <i class="fas fa-times-circle"></i> {{ form_errors(form.category) }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mt-5 d-flex gap-2">
+                            {{ form_widget(form.submit, {'attr': {'class': 'btn btn-primary btn-lg flex-grow-1'}}) }}
+                            <a href="{{ path('product_list') }}" class="btn btn-secondary btn-lg">
+                                <i class="fas fa-times"></i> Annuler
+                            </a>
+                        </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

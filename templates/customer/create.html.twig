@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter un client{% endblock %}
+
+{% block body %}
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card shadow-lg">
+                <div class="card-header">
+                    <h2 class="mb-0"><i class="fas fa-user-plus"></i> Ajouter un nouveau client</h2>
+                </div>
+                <div class="card-body">
+                    {% if form.vars.errors | length > 0 %}
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <h5 class="alert-heading"><i class="fas fa-exclamation-triangle"></i> Erreurs du formulaire</h5>
+                            {{ form_errors(form) }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% endif %}
+
+                    {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'needs-validation'}}) }}
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{ form_row(form.customer_id, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form_row(form.customer_name, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{ form_row(form.segment, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form_row(form.country, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{ form_row(form.city, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form_row(form.state, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{ form_row(form.region, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form_row(form.postal_code, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+                        </div>
+
+                        <div class="mt-5 d-flex gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg flex-grow-1">
+                                <i class="fas fa-save"></i> Ajouter le client
+                            </button>
+                            <a href="{{ path('customer_list') }}" class="btn btn-secondary btn-lg">
+                                <i class="fas fa-times"></i> Annuler
+                            </a>
+                        </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
